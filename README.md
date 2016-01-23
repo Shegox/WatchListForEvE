@@ -37,5 +37,7 @@ LocalChatScan.php
 Local.txt
 
 If you have questions feel free to contact me.
+
 EvE : Shegox Gabriel
+
 reddit: Shegox
