@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="UTF-8">
+
+    <title>Group Watchlist Tool</title>
+    <!-- UI5 Bootstrap with OpenUI5 -->
+   <script id="sap-ui-bootstrap" type="text/javascript" 
+    	src="https://sapui5.hana.ondemand.com/resources/sap-ui-core.js"
+    	data-sap-ui-theme="sap_bluecrystal" 
+    	data-sap-ui-xx-bindingSyntax="complex" 
+    	data-sap-ui-libs="sap.m,sap.ui.commons"
+        data-sap-ui-resourceroots='{
+            "MCS": "./"
+        }'>        >
+    </script>  
+    <script>
+	var hash = window.location.hash;
+	if (hash == "")
+	{
+	// Crest Login
+	window.open("https://login.eveonline.com/oauth/authorize?response_type=token&redirect_uri=https://localhost:444/SuperCapWatch/GroupWatchlist.html&client_id=53f20cd2370a4aaeab49d8a3beefcb90&scope=characterContactsWrite+characterContactsRead","_self");
+	
+	
+	}
+	hash = hash.replace("#","");
+	//window.open("addCorperationMembers.php/?"+hash+"&name="+name,"_self")
+	
+	var app = new sap.m.App();
+	var page1 = new sap.m.Page({
+	title : "Group Watchlist Tool"
+	
+	});
+	app.addPage(page1);
+	app.placeAt("root");
+
+	
+	// Inputfields
+	var s1 = swit();	
+	var s2 = swit();	
+	var s3 = swit();	
+	var s4 = select_super();	
+	var s5 = input_groupName();	
+	var s6 = select_groupType();
+	var s7 = select_standing();
+
+	s2.setState(true);
+	s1.setState(true);
+	// v_layouts
+	v_layout = new sap.ui.layout.VerticalLayout();
+	v_layout.addContent(ver_layout("Enter Groupname",s5));
+	//v_layout.addContent(ver_layout("Select Grouptype",s6));
+	//v_layout.addContent(ver_layout("Select supercapital",s4));
+	v_layout.addContent(ver_layout("Select standing",s7));
+	//v_layout.addContent(ver_layout("Last Kill was in a supercapital",s1));
+	v_layout.addContent(ver_layout("Add to watchlist",s2));
+	v_layout.addContent(ver_layout("Block contact",s3));
+	
+
+	
+	v_layout.addContent(new sap.m.Button({
+	text: "Add to contacts",
+	press: function(){
+	console.log(s7.getSelectedKey());
+	var url = "addCorperationMembers.php/?"+hash+"&name="+s5.getValue()+"&standing="+s7.getSelectedKey()+"&watched="+s2.getState()+"&blocked="+s3.getState();
+	goCrest(url);
+	//window.open("addCorperationMembers.php/?"+hash+"&name="+s5.getValue()+"&standing="+"0"+"&watched="+s2.getState()+"&blocked="+s3.getState(),"_self");	
+	}	
+	}));
+
+	page1.addContent(v_layout);
+	function ver_layout(label,content)
+	{
+	var h =  new sap.ui.layout.VerticalLayout();
+	h.addContent(new sap.m.Label({design: sap.m.LabelDesign.Bold ,text: label }));	
+	h.addContent(content);	
+	return h;
+	}
+	
+	function input_groupName()
+	{
+	var input = new sap.m.Input({
+	
+	
+	});	
+	return input;
+	}
+
+	
+	function select_super()
+	{
+	var select = new sap.m.Select({
+	
+	
+	});
+	return select;
+	}
+	
+	function select_standing()
+	{
+	var select = new sap.m.Select({
+		selectedKey: "0",
+		items: [ 
+		new sap.ui.core.Item({
+		text: "-10",
+		key : "-10"		
+		}),
+		new sap.ui.core.Item({
+		text: "-5",
+		key : "-5"		
+		}),
+		new sap.ui.core.Item({
+		text: "0",
+		key : "0"		
+		}),
+		new sap.ui.core.Item({
+		text: "5",
+		key : "5"		
+		}),
+		new sap.ui.core.Item({
+		text: "10",
+		key : "10"		
+		}),
+		
+		
+		
+		
+		]
+	
+	});
+	return select;
+	}
+	
+	function select_groupType()
+	{
+	var select = new sap.m.Select({
+	
+	
+	});
+	return select;
+	}
+  
+	function swit()
+	{
+	var swit = new sap.m.Switch({
+	customTextOn : "Yes",
+	customTextOff : "No",
+	
+	});	
+	return swit;
+	}
+		function goCrest(url)
+	{
+	var dialog = new sap.m.Dialog({ busy:true,busyIndicatorDelay:0});
+	var time0 = Date.now();
+	$.ajax({
+		url : url,
+		type : "GET",
+		context : this,
+		beforeSend : function(){ 
+		dialog.open();
+		
+		
+		},
+		success : function handleSucess(response) {
+		
+		dialog.close();
+			jQuery.sap.require("sap.m.MessageBox");
+			sap.m.MessageBox.alert("Finished! "+response+" Contacts got posted! Time needed: "+((Date.now()-time0)/1000)+"s");
+			s5.setValue("");
+		},
+		error : function(xhr, textStatus, errorThrown) {
+			
+		}
+	})
+	
+	
+	
+	}
+    </script>
+</head>
+
+<body class="sapUiBody" id="root">
+</body>
+
+</html>
