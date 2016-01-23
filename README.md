@@ -2,6 +2,7 @@
 Crest tool with JS/HTML and mainly PHP for watchlisting Groups and Supers of Groups. Also contains a prototype for a local spam filter.
 The files with number do the database pulls.
 Note: This is one of my first programms, nothing is to be taken good!
+ Also you need to add the ID from CREST, atm it adds them from a static.
 
 General Files:
 
